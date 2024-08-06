@@ -7,9 +7,8 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false); // Track if content is being generated
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  // Add initial message when component mounts
   useEffect(() => {
     setMessages([{ text: 'How may I assist you?', sender: 'bot' }]);
   }, []);
@@ -19,29 +18,26 @@ export default function Chat() {
     if (!prompt.trim()) return;
 
     if (isGenerating) {
-      handleStop(); // Stop the current generation process if active
+      handleStop();
     }
 
     setLoading(true);
     setError(null);
     setIsGenerating(true);
 
-    // Add user's prompt to chat history
     setMessages([...messages, { text: prompt, sender: 'user' }]);
-    setPrompt(''); // Clear the input field
+    setPrompt('');
 
     try {
       const res = await axios.post('/api/gpt', { prompt });
       const response = res.data.text;
       let index = 0;
 
-      // Add a placeholder message for the bot's response
       setMessages(prevMessages => [
         ...prevMessages,
         { text: '', sender: 'bot' }
       ]);
 
-      // Update the latest bot message with token-by-token text
       const id = setInterval(() => {
         setMessages(prevMessages => {
           const updatedMessages = [...prevMessages];
@@ -58,7 +54,7 @@ export default function Chat() {
           setIntervalId(null);
           setIsGenerating(false);
         }
-      }, 30); // Adjust the typing speed by changing the interval
+      }, 30);
       setIntervalId(id);
 
     } catch (err) {
@@ -92,7 +88,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center p-4 bg-gray-100">
+    <div className="flex flex-col h-screen justify-center items-center p-4 bg-gray-100" style={{ backgroundImage: `url('/asd1.jpg')`, backgroundSize: 'cover' }}>
       <header className="w-full max-w-md mb-4">
         <h1 className="text-2xl font-bold text-center">WeatherGPT</h1>
         <h2 className="text-xl text-center text-gray-700">Your Weather and GPT Assistant</h2>
