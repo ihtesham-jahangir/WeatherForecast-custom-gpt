@@ -87,9 +87,17 @@ export default function Chat() {
     }
   };
 
+  const handleClear = () => {
+    setMessages([{ text: 'How may I assist you?', sender: 'bot' }]);
+  };
+
   return (
     <div className="flex flex-col h-screen justify-center items-center p-4 bg-gray-100">
-      <div className="w-full max-w-md h-[80vh] overflow-y-auto bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+      <header className="w-full max-w-md mb-4">
+        <h1 className="text-2xl font-bold text-center">WeatherGPT</h1>
+        <h2 className="text-xl text-center text-gray-700">Your Weather and GPT Assistant</h2>
+      </header>
+      <div className="w-full max-w-md h-[70vh] overflow-y-auto bg-white p-4 rounded-lg shadow-lg border border-gray-200">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -130,6 +138,13 @@ export default function Chat() {
             Stop
           </button>
         )}
+        <button
+          type="button"
+          onClick={handleClear}
+          className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+        >
+          Clear Chat
+        </button>
       </form>
     </div>
   );

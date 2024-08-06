@@ -23,10 +23,16 @@ export async function POST(req) {
     // Convert prompt to lowercase and trim
     const lowerPrompt = prompt.toLowerCase().trim();
 
-    // Always start with assistance prompt
-    const assistancePrompt = "How may I assist you?";
-    if (lowerPrompt === assistancePrompt.toLowerCase()) {
-      return NextResponse.json({ text: assistancePrompt });
+    // Define acceptable greetings and farewells
+    const greetings = ['hi', 'hello', 'hey'];
+    const farewells = ['bye', 'goodbye', 'thank you'];
+
+    // Check for greetings and farewells
+    if (greetings.includes(lowerPrompt)) {
+      return NextResponse.json({ text: 'Hello! How can I assist you with the weather today?' });
+    }
+    if (farewells.includes(lowerPrompt)) {
+      return NextResponse.json({ text: 'Goodbye! Have a great day!' });
     }
 
     // Define keywords and prepositions
@@ -167,31 +173,7 @@ export async function POST(req) {
       }
     }
 
-    // Check for developer-related queries
-    const creatorRegex = /(who\s+made\s+you|who\s+created\s+you|who\s+developed\s+you|who\s+are\s+you|who\s+is\s+behind\s+you)/i;
-    const datasetRegex = /(which\s+dataset\s+do\s+you\s+use|data\s+source)/i;
-
-    if (creatorRegex.test(lowerPrompt)) {
-      const customResponse = `I am developed by Ihtesham Jahangir at Alpha Networks. I am designed to assist with various tasks and provide information. If you have any questions or need help, feel free to ask!`;
-      console.log('Custom response:', customResponse);
-      return NextResponse.json({ text: customResponse });
-    }
-
-    if (datasetRegex.test(lowerPrompt)) {
-      const customResponse = `I use a variety of datasets and sources, including the OpenWeather API for weather information and a range of other data sources to generate responses. My capabilities are constantly updated to provide accurate and relevant information.`;
-      console.log('Custom response:', customResponse);
-      return NextResponse.json({ text: customResponse });
-    }
-
-    // For other types of prompts, use the GPT model to generate content
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent(prompt);
-    const responseText = await result.response.text(); // Await the text() method
-
-    console.log('GPT response:', responseText);
-
-    // Send the response back to the client
-    return NextResponse.json({ text: responseText });
+    return NextResponse.json({ text: 'I can only assist with weather-related queries. Please ask about the weather in a specific city.' });
 
   } catch (error) {
     console.error('Error:', error);
